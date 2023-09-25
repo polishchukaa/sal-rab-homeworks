@@ -34,20 +34,39 @@
 // }
 
 function sendRequest(name, phone, address, goods, sum) {
-    let data = {goods: [], order: {}};
+    // Создаем объект data, который будет содержать все данные
+    let data = {
+        client: `${name} ${phone}`,
+        order: {
+            address: `ул. ${address.street}, дом ${address.house}, ${address.entrance} подъезд, ${address.floor} этаж, кв. ${address.flat}`,
+            sum: sum
+        },
+        goods: []
+    };
 
-    let countOfGoods = goods.length;
-
-    for (let i = 0; i <= countOfGoods; i += 1) {
-        data.goods.push(goods[i].title);
+    // Заполняем массив goods с информацией о позициях заказа
+    for (let i = 0; i < goods.length; i++) {
+        data.goods.push({ title: goods[i].title, count: goods[i].count });
     }
 
-    data.order.address = address;
-    data.order.sum = name + phone + address + goods + sum;
-
-    data.client = 'Иван';
-
-    let jsonData = JSON.stringify(data);
+    // Создаем объект, содержащий данные о клиенте, заказе и товарах
+    let jsonData = JSON.stringify({ data: data });
 
     return jsonData;
 }
+
+// Пример использования функции:
+const name = "Иван";
+const phone = "+7(987)65-43-210";
+const address = {
+    street: "Ленина",
+    house: 1,
+    entrance: 4,
+    floor: 5,
+    flat: 53
+};
+const goods = [{ title: "Пицца", count: 2 }];
+const sum = 900;
+
+const requestData = sendRequest(name, phone, address, goods, sum);
+console.log(requestData);
